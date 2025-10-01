@@ -76,7 +76,7 @@ flutter_facebook_auth: ^6.1.1
 # Enable Google Analytics (optional)
 ```
 
-#### Step 2: Configure Firebase for Flutter
+#### Step 2: Configure Firebase for Flutter (FlutterFire)
 ```bash
 # Install Firebase CLI
 npm install -g firebase-tools
@@ -88,8 +88,9 @@ firebase login
 dart pub global activate flutterfire_cli
 
 # Configure Firebase for your Flutter project
-cd flutter_app
-flutterfire configure
+flutterfire configure \
+  --platforms=android,ios,web \
+  --project=<your-project-id>
 ```
 
 This will generate real `firebase_options.dart` and platform-specific config files.
@@ -359,15 +360,14 @@ ANALYTICS_ENABLED=true
 
 #### Build for Android:
 ```bash
-cd flutter_app
-flutter build apk --release
+flutter build apk --release --dart-define=BACKEND_API_URL=https://your-backend.com
 # or
-flutter build appbundle --release
+flutter build appbundle --release --dart-define=BACKEND_API_URL=https://your-backend.com
 ```
 
 #### Build for iOS:
 ```bash
-flutter build ios --release
+flutter build ios --release --dart-define=BACKEND_API_URL=https://your-backend.com
 # Then use Xcode to archive and upload to App Store
 ```
 
@@ -384,6 +384,35 @@ flutter build ios --release
 - [ ] Profile management
 - [ ] Offline functionality
 
+### 9. **Feature QA Checklist**
+
+Authentication
+- Email/Password: sign up, sign in, sign out, forgot password
+- Google: with real credentials
+- Facebook: with real App ID / client token
+- Guest mode: proceeds to main screen
+
+Localization (FR/EN)
+- Switch language in Settings and verify labels across screens
+
+Theme
+- Toggle dark mode and verify persistence across restarts
+
+Live Video
+- Create `liveStreams/main` with `isActive: true`, `streamUrl: <HLS URL>`; verify playback
+
+Programmes
+- Seed `programs` with ISO dates and categories; verify filters and live badge
+
+Reels
+- Seed `reels` with `videoUrl` and metadata; verify playback, like/unlike, comments, share
+
+Notifications
+- Seed user `notifications` with `type` and `read`; verify unread badge and mark-all-as-read
+
+Navigation & Splash
+- Splash shows then routes to Auth/Main; bottom nav tabs switch correctly
+
 ### 10. **Production Optimizations**
 
 #### Add to `pubspec.yaml`:
@@ -392,7 +421,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - .env
 ```
 
 #### Performance monitoring:

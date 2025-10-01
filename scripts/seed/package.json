@@ -1,0 +1,13 @@
+{
+  "name": "moieglise-tv-seed",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.6.0"
+  }
+}
+
