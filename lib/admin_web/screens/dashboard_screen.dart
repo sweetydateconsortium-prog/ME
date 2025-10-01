@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/theme/app_colors.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -19,10 +20,10 @@ class DashboardScreen extends StatelessWidget {
           Wrap(
             spacing: 16,
             runSpacing: 16,
-            children: const [
-              _StatCard(title: 'Total Users', value: '—'),
-              _StatCard(title: 'Programs', value: '—'),
-              _StatCard(title: 'Reels', value: '—'),
+            children: [
+              _CountStatCard(title: 'Total Users', collection: 'users'),
+              _CountStatCard(title: 'Programs', collection: 'programs'),
+              _CountStatCard(title: 'Reels', collection: 'reels'),
             ],
           ),
         ],
@@ -31,10 +32,10 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
+class _CountStatCard extends StatelessWidget {
   final String title;
-  final String value;
-  const _StatCard({required this.title, required this.value});
+  final String collection;
+  const _CountStatCard({required this.title, required this.collection});
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +44,24 @@ class _StatCard extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 12),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: AppColors.primary,
-                    ),
-              ),
-            ],
+          child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: FirebaseFirestore.instance.collection(collection).snapshots(),
+            builder: (context, snapshot) {
+              final int count = snapshot.data?.docs.length ?? 0;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 12),
+                  Text(
+                    '$count',
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                          color: AppColors.primary,
+                        ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
