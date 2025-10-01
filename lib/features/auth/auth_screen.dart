@@ -28,6 +28,8 @@ class _AuthScreenState extends State<AuthScreen> {
     final formKey = GlobalKey<FormState>();
     bool isLoading = false;
     String? errorMessage;
+    final languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
 
     await showDialog(
       context: context,
@@ -35,28 +37,27 @@ class _AuthScreenState extends State<AuthScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Réinitialiser le mot de passe'),
+              title: Text(languageProvider.translate('resetPassword')),
               content: Form(
                 key: formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                        'Entrez votre adresse e-mail pour recevoir un lien de réinitialisation.'),
+                    Text(languageProvider.translate('resetPasswordDesc')),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        labelText: 'E-mail',
-                        prefixIcon: Icon(Icons.email_outlined),
+                      decoration: InputDecoration(
+                        labelText: languageProvider.translate('email'),
+                        prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez entrer votre e-mail';
+                          return languageProvider.translate('pleaseEnterEmail');
                         }
                         if (!RegExp(r'^.+@.+\..+$').hasMatch(value)) {
-                          return 'E-mail invalide';
+                          return languageProvider.translate('emailInvalid');
                         }
                         return null;
                       },
@@ -73,13 +74,14 @@ class _AuthScreenState extends State<AuthScreen> {
                 TextButton(
                   onPressed:
                       isLoading ? null : () => Navigator.of(context).pop(),
-                  child: const Text('Annuler'),
+                  child: Text(languageProvider.translate('cancel')),
                 ),
                 ElevatedButton(
                   onPressed: isLoading
                       ? null
                       : () async {
-                          if (!(formKey.currentState?.validate() ?? false)) return;
+                          if (!(formKey.currentState?.validate() ?? false))
+                            return;
                           setState(() => isLoading = true);
                           try {
                             await context
@@ -88,27 +90,18 @@ class _AuthScreenState extends State<AuthScreen> {
                                     emailController.text.trim());
                             setState(() => isLoading = false);
                             Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'Lien de réinitialisation envoyé. Vérifiez votre e-mail.')),
-                            );
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(languageProvider
+                                    .translate('resetLinkSent'))));
                           } catch (e) {
                             setState(() {
                               isLoading = false;
-                              errorMessage = context
-                                      .read<AuthProvider>()
-                                      .errorMessage ??
-                                  'Erreur lors de l\'envoi du lien. Vérifiez l\'e-mail.';
+                              errorMessage =
+                                  languageProvider.translate('resetLinkError');
                             });
                           }
                         },
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('Envoyer'),
+                  child: Text(languageProvider.translate('send')),
                 ),
               ],
             );
@@ -180,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             // Form Title
                             Text(
                               _isSignUp
-                                  ? 'Créer un compte'
+                                  ? languageProvider.translate('createAccount')
                                   : languageProvider.translate('signIn'),
                               style: Theme.of(context).textTheme.headlineSmall,
                               textAlign: TextAlign.center,
@@ -190,8 +183,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
                             Text(
                               _isSignUp
-                                  ? 'Rejoignez notre communauté de croyants'
-                                  : 'Bon retour dans votre voyage spirituel',
+                                  ? languageProvider.translate('joinCommunity')
+                                  : languageProvider.translate('welcomeBack'),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -220,7 +213,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                             prefixIcon: Icons.person_outline,
                                             validator: (value) {
                                               if (value?.isEmpty ?? true) {
-                                                return 'Prénom requis';
+                                                return languageProvider
+                                                    .translate(
+                                                        'firstNameRequired');
                                               }
                                               return null;
                                             },
@@ -234,7 +229,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                                 .translate('lastName'),
                                             validator: (value) {
                                               if (value?.isEmpty ?? true) {
-                                                return 'Nom requis';
+                                                return languageProvider
+                                                    .translate(
+                                                        'lastNameRequired');
                                               }
                                               return null;
                                             },
@@ -248,7 +245,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                     // Phone field
                                     CustomTextField(
                                       controller: _phoneController,
-                                      label: 'Numéro de téléphone',
+                                      label:
+                                          languageProvider.translate('phone'),
                                       prefixIcon: Icons.phone_outlined,
                                       keyboardType: TextInputType.phone,
                                     ),
@@ -289,7 +287,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                                   Text(
                                                     _birthDate != null
                                                         ? '${_birthDate!.day}/${_birthDate!.month}/${_birthDate!.year}'
-                                                        : 'Date de naissance',
+                                                        : languageProvider
+                                                            .translate(
+                                                                'birthDate'),
                                                     style: TextStyle(
                                                       color: _birthDate != null
                                                           ? AppColors
@@ -307,7 +307,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                         Expanded(
                                           child: CustomTextField(
                                             controller: _cityController,
-                                            label: 'Ville',
+                                            label: languageProvider
+                                                .translate('city'),
                                             prefixIcon:
                                                 Icons.location_on_outlined,
                                           ),
@@ -326,12 +327,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                     keyboardType: TextInputType.emailAddress,
                                     validator: (value) {
                                       if (value?.isEmpty ?? true) {
-                                        return 'Email requis';
+                                        return languageProvider
+                                            .translate('emailRequired');
                                       }
                                       if (!RegExp(
                                               r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                                           .hasMatch(value!)) {
-                                        return 'Email invalide';
+                                        return languageProvider
+                                            .translate('emailInvalid');
                                       }
                                       return null;
                                     },
@@ -360,10 +363,12 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ),
                                     validator: (value) {
                                       if (value?.isEmpty ?? true) {
-                                        return 'Mot de passe requis';
+                                        return languageProvider
+                                            .translate('passwordRequired');
                                       }
                                       if (value!.length < 6) {
-                                        return 'Au moins 6 caractères';
+                                        return languageProvider
+                                            .translate('passwordMinLength');
                                       }
                                       return null;
                                     },
@@ -375,12 +380,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                     // Confirm password
                                     CustomTextField(
                                       controller: _confirmPasswordController,
-                                      label: 'Confirmer le mot de passe',
+                                      label: languageProvider
+                                          .translate('confirmPassword'),
                                       prefixIcon: Icons.lock_outline,
                                       obscureText: !_showPassword,
                                       validator: (value) {
                                         if (value != _passwordController.text) {
-                                          return 'Les mots de passe ne correspondent pas';
+                                          return languageProvider
+                                              .translate('passwordMismatch');
                                         }
                                         return null;
                                       },
@@ -417,12 +424,15 @@ class _AuthScreenState extends State<AuthScreen> {
                                                       .textTheme
                                                       .bodySmall,
                                                   children: [
-                                                    const TextSpan(
-                                                        text:
-                                                            'J\'accepte les '),
                                                     TextSpan(
-                                                      text:
-                                                          'Conditions d\'utilisation',
+                                                      text: languageProvider
+                                                          .translate(
+                                                              'acceptTerms'),
+                                                    ),
+                                                    TextSpan(
+                                                      text: languageProvider
+                                                          .translate(
+                                                              'termsOfUse'),
                                                       style: TextStyle(
                                                         color: Theme.of(context)
                                                             .primaryColor,
@@ -431,11 +441,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                                                 .underline,
                                                       ),
                                                     ),
-                                                    const TextSpan(
-                                                        text: ' et la '),
                                                     TextSpan(
-                                                      text:
-                                                          'Politique de confidentialité',
+                                                        text: languageProvider
+                                                            .translate('and')),
+                                                    TextSpan(
+                                                      text: languageProvider
+                                                          .translate(
+                                                              'privacyPolicy'),
                                                       style: TextStyle(
                                                         color: Theme.of(context)
                                                             .primaryColor,
@@ -476,7 +488,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                               padding: const EdgeInsets.only(
                                                   top: 12),
                                               child: Text(
-                                                'Recevoir les mises à jour sur les sermons et événements',
+                                                languageProvider.translate(
+                                                    'receiveUpdates'),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall,
@@ -496,7 +509,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             // Submit button
                             CustomButton(
                               text: _isSignUp
-                                  ? 'Créer un compte'
+                                  ? languageProvider.translate('createAccount')
                                   : languageProvider.translate('signIn'),
                               onPressed:
                                   authProvider.isLoading ? null : _handleSubmit,
@@ -511,7 +524,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 onPressed: () {
                                   _showForgotPasswordDialog(context);
                                 },
-                                child: const Text('Mot de passe oublié ?'),
+                                child: Text(languageProvider
+                                    .translate('forgotPassword')),
                               ),
                             ],
 
@@ -525,7 +539,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
                                   child: Text(
-                                    'ou continuer avec',
+                                    languageProvider
+                                        .translate('orContinueWith'),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall
@@ -556,8 +571,10 @@ class _AuthScreenState extends State<AuthScreen> {
                               children: [
                                 Text(
                                   _isSignUp
-                                      ? 'Vous avez déjà un compte ? '
-                                      : 'Vous n\'avez pas de compte ? ',
+                                      ? languageProvider
+                                          .translate('alreadyHaveAccount')
+                                      : languageProvider
+                                          .translate('dontHaveAccount'),
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 TextButton(
@@ -567,7 +584,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                     });
                                   },
                                   child: Text(
-                                    _isSignUp ? 'Se connecter' : 'S\'inscrire',
+                                    _isSignUp
+                                        ? languageProvider.translate('signIn')
+                                        : languageProvider.translate('signUp'),
                                   ),
                                 ),
                               ],
@@ -644,13 +663,12 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Future<void> _handleSubmit() async {
+    final languageProvider = LanguageProvider();
     if (!_formKey.currentState!.validate()) return;
 
     if (_isSignUp && !_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vous devez accepter les conditions d\'utilisation'),
-        ),
+        SnackBar(content: Text(languageProvider.translate('mustAcceptTerms'))),
       );
       return;
     }
@@ -694,13 +712,7 @@ class _AuthScreenState extends State<AuthScreen> {
         break;
       case 'facebook':
         success = await authProvider.signInWithFacebook();
-        if (!success) {
-          final error = authProvider.errorMessage ??
-              'Erreur lors de la connexion avec Facebook';
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(error)),
-          );
-        }
+        if (!success) {}
         break;
     }
 

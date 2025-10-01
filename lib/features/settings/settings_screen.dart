@@ -56,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Gérer votre compte et préférences',
+                              languageProvider.translate('manageAccountPrefs'),
                               style: TextStyle(
                                 color: themeProvider.isDarkMode
                                     ? AppColors.textSecondaryDark
@@ -85,27 +85,28 @@ class SettingsScreen extends StatelessWidget {
 
                       // Account Section
                       _buildSection(
-                        'Compte',
+                        languageProvider.translate('account'),
                         [
                           if (!authProvider.isGuest)
                             _buildSettingItem(
                               Icons.person_outline,
-                              'Profil',
-                              'Mettre à jour vos informations personnelles',
+                              languageProvider.translate('profile'),
+                              languageProvider.translate('updatePersonalInfo'),
                               () {},
                               themeProvider.isDarkMode,
                             ),
                           _buildSettingItem(
                             Icons.notifications_outlined,
-                            'Notifications',
-                            'Gérer les préférences de notification',
+                            languageProvider.translate('notifications'),
+                            languageProvider
+                                .translate('manageNotificationPrefs'),
                             () {},
                             themeProvider.isDarkMode,
                           ),
                           _buildSettingItem(
                             Icons.dark_mode_outlined,
-                            'Mode sombre',
-                            'Passer au thème sombre',
+                            languageProvider.translate('darkMode'),
+                            languageProvider.translate('switchDarkTheme'),
                             null,
                             themeProvider.isDarkMode,
                             trailing: Switch(
@@ -128,10 +129,10 @@ class SettingsScreen extends StatelessWidget {
                         [
                           _buildSettingItem(
                             Icons.language_outlined,
-                            'Langue',
-                            languageProvider.languageCode == 'fr'
-                                ? 'Français'
-                                : 'English',
+                            languageProvider.translate('language'),
+                            languageProvider.translate(languageProvider.isFrench
+                                ? 'french'
+                                : 'english'),
                             null,
                             themeProvider.isDarkMode,
                             trailing: DropdownButton<String>(
@@ -152,15 +153,15 @@ class SettingsScreen extends StatelessWidget {
                           ),
                           _buildSettingItem(
                             Icons.share_outlined,
-                            'Partager l\'app',
-                            'Partager avec vos amis',
+                            languageProvider.translate('shareApp'),
+                            languageProvider.translate('shareWithFriends'),
                             () => _shareApp(),
                             themeProvider.isDarkMode,
                           ),
                           _buildSettingItem(
                             Icons.star_outline,
-                            'Évaluer l\'app',
-                            'Aidez-nous à améliorer en évaluant l\'app',
+                            languageProvider.translate('rateApp'),
+                            languageProvider.translate('helpImprove'),
                             () {},
                             themeProvider.isDarkMode,
                           ),
@@ -172,19 +173,19 @@ class SettingsScreen extends StatelessWidget {
 
                       // About Section
                       _buildSection(
-                        'À propos',
+                        languageProvider.translate('about'),
                         [
                           _buildSettingItem(
                             Icons.info_outline,
-                            'À propos de Moi Église TV',
-                            'En savoir plus sur notre mission',
+                            languageProvider.translate('aboutMoiEglise'),
+                            languageProvider.translate('learnMission'),
                             () {},
                             themeProvider.isDarkMode,
                           ),
                           _buildSettingItem(
                             Icons.help_outline,
-                            'Support',
-                            'Obtenir de l\'aide et nous contacter',
+                            languageProvider.translate('support'),
+                            languageProvider.translate('getHelpContact'),
                             () {},
                             themeProvider.isDarkMode,
                           ),
@@ -229,7 +230,7 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Version 1.0.0 • Restez connecté avec Dieu et notre communauté',
+                              languageProvider.translate('version'),
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.8),
                                 fontSize: 10,
@@ -273,6 +274,7 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Widget _buildProfileCard(bool isDark) {
+    var languageProvider = LanguageProvider();
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -351,8 +353,8 @@ class SettingsScreen extends StatelessWidget {
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text(
-                    'Modifier le profil',
+                  child: Text(
+                    languageProvider.translate('editProfile'),
                     style: TextStyle(
                       color: AppColors.primary,
                       fontSize: 12,
@@ -460,8 +462,9 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _shareApp() {
+    var languageProvider = LanguageProvider();
     Share.share(
-      'Découvrez Moi Église TV - Restez connecté avec Dieu et notre communauté ! https://moieglise.tv',
+      languageProvider.translate('discoverApp'),
       subject: 'Moi Église TV',
     );
   }

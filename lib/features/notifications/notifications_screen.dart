@@ -72,7 +72,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 }
                 if (snapshot.hasError) {
                   return Center(
-                      child: Text('Erreur de chargement des notifications'));
+                      child: Text(
+                          languageProvider.translate('notificationLoadError')));
                 }
                 final notifications = snapshot.data ?? [];
                 final unreadCount =
@@ -116,8 +117,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   ),
                                   Text(
                                     unreadCount == 0
-                                        ? 'Toutes lues'
-                                        : '$unreadCount non lue${unreadCount > 1 ? 's' : ''}',
+                                        ? languageProvider.translate('allRead')
+                                        : '$unreadCount ${languageProvider.translate(unreadCount > 1 ? 'unreadPlural' : 'unread')}',
                                     style: TextStyle(
                                       color: themeProvider.isDarkMode
                                           ? AppColors.textSecondaryDark
@@ -133,12 +134,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   ? null
                                   : () => _markAllAsRead(notifications),
                               child: _loadingMarkAll
-                                  ? const SizedBox(
+                                  ? SizedBox(
                                       width: 16,
                                       height: 16,
                                       child: CircularProgressIndicator(
-                                          strokeWidth: 2))
-                                  : const Text('Tout marquer lu'),
+                                        strokeWidth: 2,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          themeProvider.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  : Text(languageProvider
+                                      .translate('markAllRead')),
                             ),
                           ],
                         ),
@@ -155,7 +165,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 80.0),
                                     child: Center(
-                                      child: Text('Aucune notification'),
+                                      child: Text(languageProvider
+                                          .translate('noNotifications')),
                                     ),
                                   ),
                                 ],
@@ -202,7 +213,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Paramètres de notification',
+                            languageProvider.translate('notificationSettings'),
                             style: TextStyle(
                               color: themeProvider.isDarkMode
                                   ? Colors.white
@@ -212,26 +223,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           ),
                           const SizedBox(height: 12),
                           _buildNotificationSetting(
-                            'Services en direct',
-                            'Recevoir des alertes pour les services',
+                            languageProvider.translate('liveServices'),
+                            languageProvider.translate('liveServicesDesc'),
                             true,
                             themeProvider.isDarkMode,
                           ),
                           _buildNotificationSetting(
-                            'Nouveaux sermons',
-                            'Notifications pour les nouveaux contenus',
+                            languageProvider.translate('newSermons'),
+                            languageProvider.translate('newSermonsDesc'),
                             true,
                             themeProvider.isDarkMode,
                           ),
                           _buildNotificationSetting(
-                            'Rappels d\'événements',
-                            'Rappels pour les événements à venir',
+                            languageProvider.translate('eventReminders'),
+                            languageProvider.translate('eventRemindersDesc'),
                             true,
                             themeProvider.isDarkMode,
                           ),
                           _buildNotificationSetting(
-                            'Réunions de prière',
-                            'Alertes pour les réunions de prière',
+                            languageProvider.translate('prayerMeetings'),
+                            languageProvider.translate('prayerMeetingsDesc'),
                             false,
                             themeProvider.isDarkMode,
                           ),
@@ -250,6 +261,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final String type = (notification['type'] ?? '').toString();
     final Color color = _notificationColor(type);
     final IconData icon = _notificationIcon(type);
+    var languageProvider = LanguageProvider();
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -339,7 +351,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'Il y a ${notification['time']}',
+                      '${languageProvider.translate('timeAgo')}${notification['time']}',
                       style: TextStyle(
                         color: isDark
                             ? AppColors.textSecondaryDark

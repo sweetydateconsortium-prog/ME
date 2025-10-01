@@ -10,7 +10,7 @@ class AuthHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = context.read<LanguageProvider>();
-    
+
     return Column(
       children: [
         // Logo
@@ -25,7 +25,8 @@ class AuthHeader extends StatelessWidget {
             children: [
               // "me" part with script font
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF3366CC), Color(0xFF6699FF)],
@@ -43,14 +44,15 @@ class AuthHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(width: 8),
-              
+
               // "Tv" part with sans-serif font
               Transform.rotate(
                 angle: 0.2, // ~12 degrees
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.accent,
                     borderRadius: BorderRadius.circular(6),
@@ -68,27 +70,27 @@ class AuthHeader extends StatelessWidget {
             ],
           ),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // App Title
         Text(
-          'Bienvenue sur Moi Église TV',
+          languageProvider.translate('welcomeToApp'),
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
           textAlign: TextAlign.center,
         ),
-        
+
         const SizedBox(height: 8),
-        
+
         // Slogan
         Text(
           languageProvider.translate('slogan'),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Colors.white.withOpacity(0.9),
-          ),
+                color: Colors.white.withOpacity(0.9),
+              ),
           textAlign: TextAlign.center,
         ),
       ],

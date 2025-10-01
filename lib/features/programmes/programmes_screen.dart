@@ -15,6 +15,7 @@ class ProgrammesScreen extends StatefulWidget {
 class _ProgrammesScreenState extends State<ProgrammesScreen> {
   String selectedDay = 'today';
   String selectedCategory = 'all';
+  var languageProvider = LanguageProvider();
 
   List<Map<String, dynamic>> _programs = [];
   bool _isLoading = true;
@@ -52,7 +53,7 @@ class _ProgrammesScreenState extends State<ProgrammesScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = 'Erreur lors du chargement des programmes';
+        _error = languageProvider.translate('programsLoadError');
         _isLoading = false;
       });
     }
@@ -106,7 +107,7 @@ class _ProgrammesScreenState extends State<ProgrammesScreen> {
                             ),
                           ),
                           Text(
-                            'Grille des programmes Moi Église TV',
+                            languageProvider.translate('programsSchedule'),
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.8),
                               fontSize: 14,
@@ -125,11 +126,13 @@ class _ProgrammesScreenState extends State<ProgrammesScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  _buildDayButton('today', 'Aujourd\'hui'),
+                  _buildDayButton('today', languageProvider.translate('today')),
                   const SizedBox(width: 8),
-                  _buildDayButton('tomorrow', 'Demain'),
+                  _buildDayButton(
+                      'tomorrow', languageProvider.translate('tomorrow')),
                   const SizedBox(width: 8),
-                  _buildDayButton('week', 'Cette semaine'),
+                  _buildDayButton(
+                      'week', languageProvider.translate('this_week')),
                 ],
               ),
             ),
@@ -143,8 +146,8 @@ class _ProgrammesScreenState extends State<ProgrammesScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Filtrer par catégorie',
+                  Text(
+                    languageProvider.translate('filterByCategory'),
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -155,12 +158,18 @@ class _ProgrammesScreenState extends State<ProgrammesScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildCategoryChip('all', 'Tout'),
-                        _buildCategoryChip('culte', 'Culte'),
-                        _buildCategoryChip('enseignement', 'Enseignement'),
-                        _buildCategoryChip('musique', 'Musique'),
-                        _buildCategoryChip('jeunesse', 'Jeunesse'),
-                        _buildCategoryChip('special', 'Spécial'),
+                        _buildCategoryChip(
+                            'all', languageProvider.translate('all')),
+                        _buildCategoryChip(
+                            'culte', languageProvider.translate('worship')),
+                        _buildCategoryChip('enseignement',
+                            languageProvider.translate('teaching')),
+                        _buildCategoryChip(
+                            'musique', languageProvider.translate('music')),
+                        _buildCategoryChip(
+                            'jeunesse', languageProvider.translate('youth')),
+                        _buildCategoryChip(
+                            'special', languageProvider.translate('special')),
                       ],
                     ),
                   ),
@@ -178,8 +187,9 @@ class _ProgrammesScreenState extends State<ProgrammesScreen> {
                           child: Text(_error!,
                               style: const TextStyle(color: Colors.red)))
                       : _programs.isEmpty
-                          ? const Center(
-                              child: Text('Aucun programme disponible'))
+                          ? Center(
+                              child: Text(languageProvider
+                                  .translate('noProgramsAvailable')))
                           : ListView.builder(
                               padding: const EdgeInsets.all(16),
                               itemCount: _programs.length,

@@ -24,6 +24,7 @@ class _LiveScreenState extends State<LiveScreen> {
   bool _isLoading = false;
   String? _error;
   String? _streamUrl;
+  var languageProvider = LanguageProvider();
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _LiveScreenState extends State<LiveScreen> {
       if (url == null || url.isEmpty) {
         setState(() {
           _isLoading = false;
-          _error = 'Aucun flux en direct disponible.';
+          _error = languageProvider.translate('noStreamAvailable');
         });
         return;
       }
@@ -50,7 +51,7 @@ class _LiveScreenState extends State<LiveScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _error = 'Erreur lors du chargement du flux en direct';
+        _error = languageProvider.translate('streamLoadError');
       });
     }
   }
@@ -104,7 +105,7 @@ class _LiveScreenState extends State<LiveScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Erreur de lecture du flux',
+                    _error = languageProvider.translate('streamPlayError'),
                     style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
@@ -120,7 +121,7 @@ class _LiveScreenState extends State<LiveScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _error = 'Erreur de lecture du flux';
+        _error = languageProvider.translate('streamPlayError');
       });
     }
   }

@@ -24,6 +24,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
   List<Map<String, dynamic>> _comments = [];
   bool _loading = true;
   String? _error;
+  var languageProvider = LanguageProvider();
 
   @override
   void initState() {
@@ -52,7 +53,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
       });
     } catch (e) {
       setState(() {
-        _error = 'Erreur lors du chargement des commentaires';
+        _error = languageProvider.translate('commentsLoadError');
         _loading = false;
       });
     }
@@ -69,7 +70,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
           .collection('comments')
           .add({
         'userId': user.uid,
-        'userName': user.displayName ?? 'Utilisateur',
+        'userName': user.displayName ?? languageProvider.translate('user'),
         'userAvatar': user.photoURL ?? '',
         'text': _controller.text.trim(),
         'createdAt': DateTime.now().toIso8601String(),
@@ -77,7 +78,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
       _controller.clear();
       await _fetchComments();
     } catch (e) {
-      setState(() => _error = 'Erreur lors de l\'envoi du commentaire');
+      setState(() => _error = languageProvider.translate('commentSendError'));
     } finally {
       setState(() => _isSending = false);
     }
@@ -100,7 +101,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
               children: [
                 Expanded(
                   child: Text(
-                    'Commentaires',
+                    languageProvider.translate('comments'),
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -121,7 +122,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                 : _error != null
                     ? Text(_error!, style: const TextStyle(color: Colors.white))
                     : _comments.isEmpty
-                        ? const Text('Aucun commentaire',
+                        ? Text(languageProvider.translate('noComments'),
                             style: TextStyle(color: Colors.white70))
                         : Expanded(
                             child: ListView.builder(
@@ -149,9 +150,9 @@ class _CommentsSheetState extends State<CommentsSheet> {
                   child: TextField(
                     controller: _controller,
                     style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      hintText: 'Ajouter un commentaire...',
-                      hintStyle: TextStyle(color: Colors.white54),
+                    decoration: InputDecoration(
+                      hintText: languageProvider.translate('addComment'),
+                      hintStyle: const TextStyle(color: Colors.white54),
                       border: InputBorder.none,
                     ),
                   ),
@@ -276,6 +277,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
     final likeCount = reel['likeCount'] ?? 0;
     final commentCount = reel['commentCount'] ?? 0;
 
+    var languageProvider = context.read<LanguageProvider>();
     return Stack(
       children: [
         // Video Player
@@ -370,7 +372,7 @@ class _ReelsScreenState extends State<ReelsScreen> {
                               ),
                             ),
                             Text(
-                              '${reel['likes']} J\'aime',
+                              '${reel['likes']} ${languageProvider.translate('addComment')}',
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.8),
                                 fontSize: 12,
@@ -469,12 +471,12 @@ class _ReelsScreenState extends State<ReelsScreen> {
               // Share button
               _buildActionButton(
                 icon: Icons.share_outlined,
-                label: 'Partager',
+                label: languageProvider.translate('share'),
                 onTap: () {
                   final url = reel['videoUrl'] ?? '';
                   final desc = reel['description'] ?? '';
                   Share.share(
-                      'Regardez ce reel sur Moi Église TV: $desc\n$url');
+                      '${languageProvider.translate('watchReelMessage')}$desc\n$url');
                 },
               ),
             ],
