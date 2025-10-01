@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1080790349293",
+    "project_id": "moi-eglise-tv-586e7",
+    "storage_bucket": "moi-eglise-tv-586e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080790349293:android:d4141bc2c88e432b9be3e4",
+        "android_client_info": {
+          "package_name": "com.example.moi_eglise_tv"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHUG1j4IOJNnwTPpBwb8coAaeEVHOeW2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

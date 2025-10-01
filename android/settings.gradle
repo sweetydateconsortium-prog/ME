@@ -1,0 +1,20 @@
+// Path: C:\Users\Betsaleel\Music\FINAL APP\flutter_app\android\settings.gradle
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Confirmed from your pubspec.yaml file
+rootProject.name = "moi_eglise_tv"
+include ':app'
