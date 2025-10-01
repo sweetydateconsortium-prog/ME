@@ -80,6 +80,26 @@ Web release:
 flutter build web --release --dart-define=BACKEND_API_URL=https://your-backend.com
 ```
 
+## Android release signing
+
+1) Create a keystore (one-time):
+```bash
+keytool -genkey -v -keystore ~/keystores/moieglise.jks -keyalg RSA -keysize 2048 -validity 10000 -alias moieglise
+```
+
+2) Create `key.properties` in project root (never commit secrets):
+```properties
+storeFile=/absolute/path/to/moieglise.jks
+storePassword=your-store-password
+keyAlias=moieglise
+keyPassword=your-key-password
+```
+
+3) Build signed release:
+```bash
+flutter build appbundle --release --dart-define=BACKEND_API_URL=https://your-backend.com
+```
+
 ## 6) Feature QA Checklist (Step-by-step)
 
 Authentication
