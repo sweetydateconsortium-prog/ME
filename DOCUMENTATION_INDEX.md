@@ -52,8 +52,9 @@ This index helps you find the right documentation for your needs. All files are 
 ### **For Content Managers / Admins**
 
 1. **QUICK_START_ADMIN.md** ⭐ **START HERE**
-2. **ADMIN_SETUP_GUIDE.md** - Comprehensive admin guide
-3. **SUMMARY_FOR_USER.md** - Understanding the system
+2. **ADMIN_WEB_SETUP.md** - Admin web run/auth/deploy guide
+3. **ADMIN_SETUP_GUIDE.md** - Comprehensive admin guide
+4. **SUMMARY_FOR_USER.md** - Understanding the system
 
 **Daily operations:**
 - How to start/stop live streams
