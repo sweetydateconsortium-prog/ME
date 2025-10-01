@@ -79,7 +79,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   onPressed: isLoading
                       ? null
                       : () async {
-                          if (formKey.currentState?.validate() ?? false) return;
+                          if (!(formKey.currentState?.validate() ?? false)) return;
                           setState(() => isLoading = true);
                           try {
                             await context

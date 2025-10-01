@@ -229,7 +229,7 @@ class _SplashScreenState extends State<SplashScreen>
           child: const Text(
             'me',
             style: TextStyle(
-              fontFamily: 'Dancing Script',
+              fontFamily: 'Script',
               fontSize: 32,
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,

@@ -247,6 +247,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _buildNotificationCard(
       Map<String, dynamic> notification, bool isDark) {
+    final String type = (notification['type'] ?? '').toString();
+    final Color color = _notificationColor(type);
+    final IconData icon = _notificationIcon(type);
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -271,12 +274,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: notification['color'].withOpacity(0.1),
+              color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
-              notification['icon'],
-              color: notification['color'],
+              icon,
+              color: color,
               size: 20,
             ),
           ),
@@ -352,6 +355,32 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ],
       ),
     );
+  }
+
+  Color _notificationColor(String type) {
+    switch (type) {
+      case 'live_service':
+        return Colors.redAccent;
+      case 'new_sermon':
+        return Colors.blueAccent;
+      case 'event_reminder':
+        return Colors.orangeAccent;
+      default:
+        return AppColors.info;
+    }
+  }
+
+  IconData _notificationIcon(String type) {
+    switch (type) {
+      case 'live_service':
+        return Icons.live_tv;
+      case 'new_sermon':
+        return Icons.library_books;
+      case 'event_reminder':
+        return Icons.event_available;
+      default:
+        return Icons.notifications;
+    }
   }
 
   Widget _buildNotificationSetting(

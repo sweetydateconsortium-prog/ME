@@ -50,8 +50,37 @@ android {
         multiDexEnabled true
     }
 
+    def keystorePropertiesFile = rootProject.file('key.properties')
+    def keystoreProperties = new Properties()
+    if (keystorePropertiesFile.exists()) {
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    }
+
+    signingConfigs {
+        release {
+            if (keystoreProperties.isEmpty()) {
+                // Fallback to debug signing when no key.properties provided
+                storeFile file(System.getenv('ANDROID_KEYSTORE_PATH') ?: '')
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD') ?: ''
+                keyAlias System.getenv('ANDROID_KEY_ALIAS') ?: ''
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD') ?: ''
+            } else {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             signingConfig signingConfigs.debug
         }
     }
