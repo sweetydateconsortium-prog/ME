@@ -191,8 +191,25 @@ class _ReelsScreenState extends State<ReelsScreen> {
   }
 
   Future<void> _fetchReels() async {
-    // Dummy implementation for fetching reels, replace with your logic
-    // and initialize _controllers accordingly
+    try {
+      final reels = await FirebaseService().getReels(limit: 20);
+      final controllers = <VideoPlayerController>[];
+      for (final reel in reels) {
+        final url = reel['videoUrl'];
+        if (url is String && url.isNotEmpty) {
+          final controller = VideoPlayerController.networkUrl(Uri.parse(url));
+          await controller.initialize();
+          controller.setLooping(true);
+          controllers.add(controller);
+        }
+      }
+      setState(() {
+        _reels = reels;
+        _controllers = controllers;
+      });
+    } catch (e) {
+      // keep empty UI, could add error banner
+    }
   }
 
   @override
